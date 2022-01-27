@@ -1,0 +1,3 @@
+include ':RTC'
+include ':app'
+rootProject.name = "MyRTC"
