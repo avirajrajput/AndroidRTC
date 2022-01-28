@@ -32,3 +32,9 @@ dependencies {
 
     implementation project(path: ':RTC')
 }
+
+android {
+
+    ndkVersion "21.0.6113669"
+
+}
