@@ -6,7 +6,7 @@ import android.content.Context;
 import com.manacher.rtc.interfaces.RTCObserver;
 import com.manacher.rtc.observers.CustomPeerConnectionObserver;
 import com.manacher.rtc.observers.CustomSdpObserver;
-import com.manacher.rtc.utils.Constants;
+import com.manacher.rtc.utils.RTCConstant;
 import com.manacher.rtc.utils.IceCandidateServer;
 import com.manacher.rtc.utils.Offer;
 import com.manacher.rtc.utils.SessionDescriptionData;
@@ -27,8 +27,8 @@ import org.webrtc.voiceengine.WebRtcAudioUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManacherService {
-    private Context activity;
+public class AndroidRTC {
+    private RTCObserver activity;
     private PeerConnection peerConnection;
     private DataChannel localDataChannel;
     private PeerConnectionFactory pcFactory;
@@ -43,36 +43,39 @@ public class ManacherService {
     private Util util;
     private RTCObserver listener;
 
-    private static ManacherService instance;
+    private static AndroidRTC INSTANCE;
 
-    public ManacherService(Context activity){
-        this.activity = activity;
+    public static final int ANSWER = 4;
+    public static final int OFFER = 5;
+
+    public AndroidRTC(RTCObserver context){
+        this.activity = context;
         this.initialized();
     }
 
-    public static ManacherService initialized(Context context){
-        if(instance == null){
-            instance = new ManacherService(context);
+    public static AndroidRTC initialized(RTCObserver context){
+        if(INSTANCE == null){
+            INSTANCE = new AndroidRTC(context);
         }
 
-        return instance;
+        return INSTANCE;
     }
 
     private void initialized(){
         util = new Util();
         listener = (RTCObserver) activity;
 
-        PeerConnectionFactory.InitializationOptions initializationOptions = PeerConnectionFactory.InitializationOptions.builder(activity).createInitializationOptions();
+        PeerConnectionFactory.InitializationOptions initializationOptions = PeerConnectionFactory.InitializationOptions.builder((Context) activity).createInitializationOptions();
         PeerConnectionFactory.initialize(initializationOptions);
         PeerConnectionFactory.Options options = new PeerConnectionFactory.Options();
         pcFactory = PeerConnectionFactory.builder().setOptions(options).createPeerConnectionFactory();
 
-        localStream = pcFactory.createLocalMediaStream(Constants.MEDIA_STREAM_LABEL_ONE);
-        remoteStream = pcFactory.createLocalMediaStream(Constants.MEDIA_STREAM_LABEL_SECOND);
+        localStream = pcFactory.createLocalMediaStream(RTCConstant.MEDIA_STREAM_LABEL_ONE);
+        remoteStream = pcFactory.createLocalMediaStream(RTCConstant.MEDIA_STREAM_LABEL_SECOND);
 
         List<PeerConnection.IceServer> iceServers = new ArrayList<>();
-        iceServers.add(PeerConnection.IceServer.builder(Constants.STUN_SERVER).createIceServer());
-        iceServers.add(PeerConnection.IceServer.builder(Constants.TUN_SERVER).setUsername(Constants.TUN_USERNAME).setPassword(Constants.TUN_PASSWORD).createIceServer());
+        iceServers.add(PeerConnection.IceServer.builder(RTCConstant.STUN_SERVER).createIceServer());
+        iceServers.add(PeerConnection.IceServer.builder(RTCConstant.TUN_SERVER).setUsername(RTCConstant.TUN_USERNAME).setPassword(RTCConstant.TUN_PASSWORD).createIceServer());
 
         rtcConfig = new PeerConnection.RTCConfiguration(iceServers);
 
@@ -80,9 +83,9 @@ public class ManacherService {
         rtcConfig.enableDtlsSrtp = true;
 
     }
-    //
+
     // Step 1
-    public void createEvent(){
+    public void createCandidates(){
         peerConnection = pcFactory.createPeerConnection(rtcConfig,
                 new CustomPeerConnectionObserver() {
 
@@ -164,7 +167,7 @@ public class ManacherService {
                 super.onCreateSuccess(sessionDescription);
 
                 Offer offer = new Offer(sessionDescription.description, sessionDescription.type);
-                listener.onInvitation(offer, SessionDescription.Type.OFFER);
+                listener.onInvitation(offer, OFFER);
 
                 peerConnection.setLocalDescription(new CustomSdpObserver(), sessionDescription);
                 // sessionDescription.description is string which needs to the shared across network
@@ -195,7 +198,7 @@ public class ManacherService {
                     SessionDescription sessionDescription_ = new SessionDescription(SessionDescription.Type.ANSWER, sessionDescription.description);
                     Offer answer = new Offer(sessionDescription_.description, sessionDescription_.type);
 
-                    listener.onInvitation(answer, SessionDescription.Type.ANSWER);
+                    listener.onInvitation(answer, ANSWER);
 
                     peerConnection.setLocalDescription(new CustomSdpObserver(), sessionDescription_);
                     // sessionDescription.description is string which needs to the shared across network

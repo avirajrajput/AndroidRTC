@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.manacher.rtc.services.ManacherService;
+import com.manacher.rtc.services.AndroidRTC;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,6 +13,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ManacherService service = ManacherService.initialized(this);
+        AndroidRTC service = AndroidRTC.initialized(this);
     }
 }

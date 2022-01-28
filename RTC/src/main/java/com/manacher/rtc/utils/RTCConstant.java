@@ -1,6 +1,6 @@
 package com.manacher.rtc.utils;
 
-public class Constants {
+public class RTCConstant {
     public static String STUN_SERVER= "";
     public static String TUN_SERVER = "";
     public static String TUN_USERNAME = "";
