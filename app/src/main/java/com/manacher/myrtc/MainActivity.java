@@ -13,6 +13,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AndroidRTC service = AndroidRTC.initialized(this);
+//        AndroidRTC service = AndroidRTC.initialized(this);
     }
 }
