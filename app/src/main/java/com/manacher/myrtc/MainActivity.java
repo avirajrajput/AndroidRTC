@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.manacher.rtc.services.AndroidRTC;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -13,6 +11,5 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        AndroidRTC service = AndroidRTC.initialized(this);
     }
 }
