@@ -19,7 +19,7 @@ Step 2. ***Add the dependency***
 
 dependencies {
 
-      implementation 'com.github.avirajrajput:AndroidRTC:0.0.1'
+      implementation 'com.github.avirajrajput:AndroidRTC:Tag'
       
 }
 
