@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MyRTC</string>
+
+    <string name="stun_server">stun:doctormeetup.com:3478</string>
+    <string name="turn_server">turn:doctormeetup.com:3478</string>
+
+    <string name="turn_username">test</string>
+    <string name="turn_password">test123</string>
 </resources>
