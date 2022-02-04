@@ -20,6 +20,7 @@ Step 2. ***Add the dependency***
 dependencies {
 
       implementation 'com.github.avirajrajput:AndroidRTC:Tag'
+      implementation 'org.webrtc:google-webrtc:1.0.32006'
       
 }
 
