@@ -1,6 +1,5 @@
 package com.manacher.rtc.webrtc.services;
 
-
 import android.content.Context;
 import android.util.Log;
 
@@ -77,11 +76,11 @@ public class AndroidRTC {
 
         rtcConfig.enableRtpDataChannel = false;
         rtcConfig.enableDtlsSrtp = true;
-
+        
+        this.createCandidates();
     }
 
-    // Step 1
-    public void createCandidates(){
+    private void createCandidates(){
 
         peerConnection = pcFactory.createPeerConnection(rtcConfig,
                 new CustomPeerConnectionObserver() {
@@ -107,7 +106,6 @@ public class AndroidRTC {
                             remoteStream.addTrack(remoteAudioTrack);
                         }
                     }
-
 
                     @Override
                     public void onDataChannel(DataChannel dataChannel) {
@@ -137,22 +135,23 @@ public class AndroidRTC {
                     }
                 });
 
-        DataChannel.Init dcInit = new DataChannel.Init();
-
-        dcInit.ordered = false;
-        dcInit.negotiated = false;
-
         if (peerConnection != null) {
-            localDataChannel = peerConnection.createDataChannel("1", dcInit);
-            localDataChannel.registerObserver((DataChannel.Observer) context);
-            listener.onDataChannel(localDataChannel);
             peerConnection.addStream(createStream());
         }
-
     }
 
-    // Step 2
     public void createOffer(){
+        if(peerConnection == null){
+            return;
+        }
+
+        DataChannel.Init dataChannelInit = new DataChannel.Init();
+        dataChannelInit.ordered = false;
+        dataChannelInit.negotiated = false;
+        localDataChannel = peerConnection.createDataChannel("1", dataChannelInit);
+        localDataChannel.registerObserver((DataChannel.Observer) context);
+        listener.onDataChannel(localDataChannel);
+
         peerConnection.createOffer(new CustomSdpObserver() {
 
             @Override
@@ -223,6 +222,10 @@ public class AndroidRTC {
 
     public PeerConnection getPeerConnection(){
         return peerConnection;
+    }
+
+    public boolean addIceCandidate(IceCandidateServer iceCandidateServer){
+        return peerConnection.addIceCandidate(util.getIceCandidate(iceCandidateServer));
     }
 
     public AudioTrack getLocalAudioTrack(){
