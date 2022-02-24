@@ -1,8 +1,6 @@
 package com.manacher.rtc.webrtc.services;
 
 import android.content.Context;
-import android.util.Log;
-
 
 import com.manacher.rtc.webrtc.interfaces.RTCObserver;
 import com.manacher.rtc.webrtc.observers.CustomPeerConnectionObserver;
@@ -76,7 +74,7 @@ public class AndroidRTC {
 
         rtcConfig.enableRtpDataChannel = false;
         rtcConfig.enableDtlsSrtp = true;
-        
+
         this.createCandidates();
     }
 
