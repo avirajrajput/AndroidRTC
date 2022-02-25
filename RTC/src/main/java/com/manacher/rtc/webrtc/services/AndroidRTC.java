@@ -53,8 +53,9 @@ public class AndroidRTC {
     public static final int CLOSED = 7;
     public static final int FAILED = 8;
 
-    public AndroidRTC(Context context){
+    public AndroidRTC(Context context, String id){
         this.context = context;
+        this.id = id;
         this.initialized();
     }
 
@@ -91,7 +92,7 @@ public class AndroidRTC {
                     public void onIceCandidate(IceCandidate iceCandidate) {
                         super.onIceCandidate(iceCandidate);
                         IceCandidateServer iceCandidateServer = util.getIceCandidateServer(iceCandidate);
-                        listener.onIceCandidate(iceCandidateServer);
+                        listener.onIceCandidate(iceCandidateServer, id);
                     }
 
                     @Override
@@ -114,7 +115,7 @@ public class AndroidRTC {
                         super.onDataChannel(dataChannel);
                         localDataChannel = dataChannel;
                         localDataChannel.registerObserver((DataChannel.Observer) context);
-                        listener.onDataChannel(localDataChannel);
+                        listener.onDataChannel(localDataChannel, id);
                     }
 
                     @Override
@@ -152,7 +153,7 @@ public class AndroidRTC {
         dataChannelInit.negotiated = false;
         localDataChannel = peerConnection.createDataChannel("1", dataChannelInit);
         localDataChannel.registerObserver((DataChannel.Observer) context);
-        listener.onDataChannel(localDataChannel);
+        listener.onDataChannel(localDataChannel, id);
 
         peerConnection.createOffer(new CustomSdpObserver() {
 
@@ -161,7 +162,7 @@ public class AndroidRTC {
                 super.onCreateSuccess(sessionDescription);
 
                 Offer offer = new Offer(sessionDescription.description, sessionDescription.type);
-                listener.onInvitation(offer, OFFER);
+                listener.onInvitation(offer, OFFER, id);
 
                 peerConnection.setLocalDescription(new CustomSdpObserver(), sessionDescription);
                 // sessionDescription.description is string which needs to the shared across network
@@ -191,7 +192,7 @@ public class AndroidRTC {
                     SessionDescription sessionDescription_ = new SessionDescription(SessionDescription.Type.ANSWER, sessionDescription.description);
                     Offer answer = new Offer(sessionDescription_.description, sessionDescription_.type);
 
-                    listener.onInvitation(answer, ANSWER);
+                    listener.onInvitation(answer, ANSWER, id);
 
                     peerConnection.setLocalDescription(new CustomSdpObserver(), sessionDescription_);
                     // sessionDescription.description is string which needs to the shared across network
@@ -251,7 +252,7 @@ public class AndroidRTC {
         if(obj == null){
             return false;
         }
-        
+
         return this.id.compareTo(((AndroidRTC)obj).id) == 0;
     }
 }
