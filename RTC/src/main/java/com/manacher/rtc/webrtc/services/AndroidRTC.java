@@ -53,6 +53,9 @@ public class AndroidRTC {
     public static final int CLOSED = 7;
     public static final int FAILED = 8;
 
+    public int type;
+
+
     public AndroidRTC(Context context, String id){
         this.context = context;
         this.id = id;
@@ -92,7 +95,7 @@ public class AndroidRTC {
                     public void onIceCandidate(IceCandidate iceCandidate) {
                         super.onIceCandidate(iceCandidate);
                         IceCandidateServer iceCandidateServer = util.getIceCandidateServer(iceCandidate);
-                        listener.onIceCandidate(iceCandidateServer, id);
+                        listener.onIceCandidate(iceCandidateServer, id, type);
                     }
 
                     @Override
@@ -148,6 +151,7 @@ public class AndroidRTC {
             return;
         }
 
+        type = OFFER;
         DataChannel.Init dataChannelInit = new DataChannel.Init();
         dataChannelInit.ordered = false;
         dataChannelInit.negotiated = false;
@@ -177,7 +181,8 @@ public class AndroidRTC {
     }
 
     public void createAnswer(SessionDescriptionData sessionDescriptionData){
-
+        type = ANSWER;
+        
         if (sessionDescriptionData != null && sessionDescriptionData.getOffer() != null) {
             SessionDescription sessionDescription = new SessionDescription(sessionDescriptionData.getOffer().getType(), sessionDescriptionData.getOffer().getSdp());
             peerConnection.setRemoteDescription(new CustomSdpObserver(), sessionDescription);
