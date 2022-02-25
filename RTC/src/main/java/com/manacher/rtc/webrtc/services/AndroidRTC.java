@@ -96,7 +96,7 @@ public class AndroidRTC {
                     public void onIceCandidate(IceCandidate iceCandidate) {
                         super.onIceCandidate(iceCandidate);
                         IceCandidateServer iceCandidateServer = util.getIceCandidateServer(iceCandidate);
-                        listener.onIceCandidate(iceCandidateServer, id, type);
+                        listener.onIceCandidate(iceCandidateServer, id, otherId, type);
                     }
 
                     @Override
@@ -119,7 +119,7 @@ public class AndroidRTC {
                         super.onDataChannel(dataChannel);
                         localDataChannel = dataChannel;
                         localDataChannel.registerObserver((DataChannel.Observer) context);
-                        listener.onDataChannel(localDataChannel, id, otherId);
+                        listener.onDataChannel(localDataChannel, id);
                     }
 
                     @Override
@@ -158,7 +158,7 @@ public class AndroidRTC {
         dataChannelInit.negotiated = false;
         localDataChannel = peerConnection.createDataChannel("1", dataChannelInit);
         localDataChannel.registerObserver((DataChannel.Observer) context);
-        listener.onDataChannel(localDataChannel, id, otherId);
+        listener.onDataChannel(localDataChannel, id);
 
         peerConnection.createOffer(new CustomSdpObserver() {
 
