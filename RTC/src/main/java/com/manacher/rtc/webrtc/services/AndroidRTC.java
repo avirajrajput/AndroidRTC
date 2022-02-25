@@ -2,6 +2,8 @@ package com.manacher.rtc.webrtc.services;
 
 import android.content.Context;
 
+import androidx.annotation.Nullable;
+
 import com.manacher.rtc.webrtc.interfaces.RTCObserver;
 import com.manacher.rtc.webrtc.observers.CustomPeerConnectionObserver;
 import com.manacher.rtc.webrtc.observers.CustomSdpObserver;
@@ -41,6 +43,8 @@ public class AndroidRTC {
 
     private Util util;
     private RTCObserver listener;
+
+    private String id;
 
     public static final int ANSWER = 4;
     public static final int OFFER = 5;
@@ -232,5 +236,22 @@ public class AndroidRTC {
 
     public AudioTrack getRemoteAudioTrack(){
         return remoteAudioTrack;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(obj == null){
+            return false;
+        }
+        
+        return this.id.compareTo(((AndroidRTC)obj).id) == 0;
     }
 }
