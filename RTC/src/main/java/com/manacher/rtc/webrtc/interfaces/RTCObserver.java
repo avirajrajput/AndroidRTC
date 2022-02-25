@@ -6,8 +6,8 @@ import com.manacher.rtc.webrtc.utils.Offer;
 import org.webrtc.DataChannel;
 
 public interface RTCObserver {
-    void onIceCandidate(IceCandidateServer iceCandidateServer, String id, int type);
+    void onIceCandidate(IceCandidateServer iceCandidateServer, String id, String otherId, int type);
     void iceCandidateStatus(int status);
-    void onDataChannel(DataChannel dataChannel, String id, String otherId);
+    void onDataChannel(DataChannel dataChannel, String id);
     void onInvitation(Offer offer, int type, String id, String otherId);
 }
