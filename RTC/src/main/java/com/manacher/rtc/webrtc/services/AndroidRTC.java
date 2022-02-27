@@ -30,8 +30,8 @@ import java.util.List;
 
 public class AndroidRTC {
     private Context context;
-    private DataChannel localDataChannel;
-    private PeerConnection peerConnection;
+    public DataChannel localDataChannel;
+    public PeerConnection peerConnection;
     private PeerConnectionFactory pcFactory;
     private PeerConnection.RTCConfiguration rtcConfig;
 
